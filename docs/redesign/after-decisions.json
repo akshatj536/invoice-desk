@@ -1,0 +1,142 @@
+{
+  "captured_at": "2026-11-11T16:00:14.447Z",
+  "base": "http://localhost:8790",
+  "model": "gemini-3.8-flash",
+  "store": "local store",
+  "results": [
+    {
+      "file": "01_happy_path.pdf",
+      "run_id": "1111-155824-87ac",
+      "decision": "APPROVE",
+      "reason_codes": [],
+      "expected_decision": "APPROVE",
+      "expected_codes": [],
+      "duration_ms": 8761
+    },
+    {
+      "file": "02_bank_details_changed.pdf",
+      "run_id": "1111-155833-029a",
+      "decision": "HOLD",
+      "reason_codes": [
+        "BANK_DETAILS_MISMATCH"
+      ],
+      "expected_decision": "HOLD",
+      "expected_codes": [
+        "BANK_DETAILS_MISMATCH"
+      ],
+      "duration_ms": 8662
+    },
+    {
+      "file": "03_vendor_math_error.pdf",
+      "run_id": "1111-155842-d83b",
+      "decision": "HOLD",
+      "reason_codes": [
+        "VENDOR_MATH_ERROR"
+      ],
+      "expected_decision": "HOLD",
+      "expected_codes": [
+        "VENDOR_MATH_ERROR"
+      ],
+      "duration_ms": 19363
+    },
+    {
+      "file": "04_duplicate_resubmitted.pdf",
+      "run_id": "1111-155902-49b7",
+      "decision": "HOLD",
+      "reason_codes": [
+        "DUPLICATE_SUSPECTED"
+      ],
+      "expected_decision": "HOLD",
+      "expected_codes": [
+        "DUPLICATE_SUSPECTED"
+      ],
+      "duration_ms": 7527
+    },
+    {
+      "file": "05a_split_part1.pdf",
+      "run_id": "1111-155910-7976",
+      "decision": "APPROVE",
+      "reason_codes": [],
+      "expected_decision": "APPROVE",
+      "expected_codes": [],
+      "duration_ms": 7258
+    },
+    {
+      "file": "05b_split_part2.pdf",
+      "run_id": "1111-155918-0835",
+      "decision": "HOLD",
+      "reason_codes": [
+        "QTY_EXCEEDS_REMAINING",
+        "RUNNING_TOTAL_EXCEEDS_PO"
+      ],
+      "expected_decision": "HOLD",
+      "expected_codes": [
+        "QTY_EXCEEDS_REMAINING",
+        "RUNNING_TOTAL_EXCEEDS_PO"
+      ],
+      "duration_ms": 7031
+    },
+    {
+      "file": "06_scanned.pdf",
+      "run_id": "1111-155925-5b71",
+      "decision": "APPROVE",
+      "reason_codes": [],
+      "expected_decision": "APPROVE",
+      "expected_codes": [],
+      "duration_ms": 11334
+    },
+    {
+      "file": "07_no_po_number.pdf",
+      "run_id": "1111-155938-ed38",
+      "decision": "HOLD",
+      "reason_codes": [
+        "PO_INFERRED"
+      ],
+      "expected_decision": "HOLD",
+      "expected_codes": [
+        "PO_INFERRED"
+      ],
+      "duration_ms": 10268
+    },
+    {
+      "file": "08_price_over_tolerance.pdf",
+      "run_id": "1111-155949-398f",
+      "decision": "HOLD",
+      "reason_codes": [
+        "PRICE_OVER_TOLERANCE",
+        "RUNNING_TOTAL_EXCEEDS_PO"
+      ],
+      "expected_decision": "HOLD",
+      "expected_codes": [
+        "PRICE_OVER_TOLERANCE"
+      ],
+      "duration_ms": 9888
+    },
+    {
+      "file": "09_unapproved_vendor.pdf",
+      "run_id": "1111-155959-cbd4",
+      "decision": "REJECT",
+      "reason_codes": [
+        "VENDOR_NOT_APPROVED"
+      ],
+      "expected_decision": "REJECT",
+      "expected_codes": [
+        "VENDOR_NOT_APPROVED"
+      ],
+      "duration_ms": 6898
+    },
+    {
+      "file": "10_proforma.pdf",
+      "run_id": "1111-160006-8fc7",
+      "decision": "REJECT",
+      "reason_codes": [
+        "DOC_NOT_INVOICE"
+      ],
+      "expected_decision": "REJECT",
+      "expected_codes": [
+        "DOC_NOT_INVOICE"
+      ],
+      "duration_ms": 7562
+    }
+  ]
+}
