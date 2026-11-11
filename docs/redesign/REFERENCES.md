@@ -3,7 +3,7 @@
 This synthesizes three research reports from 2026-11-11. They were compiled only from public sources: Ramp's public product tour, Mercury's public demo, help centres, changelogs and Linear's site.
 - Values marked **[v]** were verified from a source, often as computed CSS read from a public demo or tour DOM.
 - Values marked **[e]** are estimates.
-- **Stripe Dashboard was not researched.** That agent was stopped before it reported. Nothing below is attributed to Stripe.
+- **Stripe Dashboard was not researched.** That agent was stopped before it reported. Nothing below is attributed to Stripe. It did save three public-page screenshots before stopping (`stripe-invoices-list.png`, `stripe-detail-layout.png`, `stripe-datatable.png`). They have not been analysed and are kept for visual reference only.
 
 Screenshots in `docs/redesign/research/` are **internal reference only**, because they contain the vendors' logos and brand colours:
 - `linear-app-shell.png`, `linear-list-view.png`
