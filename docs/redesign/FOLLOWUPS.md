@@ -16,3 +16,10 @@ These are things the redesign would benefit from that need data, behaviour or ba
 | 10 | **Keyboard navigation**: J/K for previous/next invoice in detail, ⌘K command menu, 1/2/3 to approve/reject/hold (seen in Linear and Ramp) | New interaction layer, out of scope for a presentation pass | Mouse-driven; detail pages link back to their list |
 | 11 | **Document pane on the right** (Ramp moved to this in Jan 2026) and a resizable divider | The brief specifies PDF on the left at about 45% | PDF left, fixed split |
 | 12 | **Approval chain / multi-approver** ("0 of 2" approvals) | One reviewer per hold; there is no approval-chain model | A single reviewer decision with a note |
+| 13 | **Remove unused v1 frontend files** (`src/pages/{NewRun,Dashboard,RunView,Review,Records,HowItWorks}.tsx`, `src/components/{Layout,ui,StageDetails}.tsx`, `src/lib/{reasons,format}.ts`) | The brief requires approval before deleting files | They are no longer imported or rendered; they still compile and are kept for reference |
+| 14 | **Backend stage summaries and check messages** contain v1 phrasing (e.g. "Possible payment fraud: …") | Backend is out of scope | The detail page shows UI-written evidence lines from structured evidence; raw messages appear in Dev mode and as a fallback |
+| 15 | **KPI strip follows the active tab** (raised in review) | KPIs come from the global `stats` object | KPIs always describe all invoices |
+| 16 | **Sticky table headers on narrow screens** | Below the `xl` breakpoint, tables scroll horizontally, which turns off sticky headers | Sticky on screens 1280px and wider |
+| 17 | **PDF viewer in headless screenshots** | Chrome's built-in viewer renders black in headless capture | A real browser renders it; pdf.js would give consistent rendering if needed |
+| 18 | **Reviewer identity** in the Exceptions Resolved tab | Only stored in the run's event log as "AP reviewer" | Shown on the invoice detail page; no "By" column in the list |
+

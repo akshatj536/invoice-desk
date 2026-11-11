@@ -93,7 +93,7 @@ export default function Inbox() {
                     <Tr key={r.id} onClick={() => nav(`/invoices/${r.id}`)}>
                       <Td className="whitespace-nowrap text-fg-muted tabular-nums">{dateTime(r.created_at)}</Td>
                       <Td>{r.vendor_name ?? <span className="text-fg-subtle">{r.filename}</span>}</Td>
-                      <Td className="tabular-nums">{r.invoice_number ?? <Dash />}</Td>
+                      <Td>{r.invoice_number ?? <Dash />}</Td>
                       <Td numeric>{r.total != null ? money(r.total) : <Dash />}</Td>
                       <Td>{st.processing
                         ? <span className="inline-flex items-center gap-2"><Badge tone="neutral" processing>Processing</Badge><span className="text-fg-muted">{progress[r.id] ?? 'Receiving…'}</span></span>

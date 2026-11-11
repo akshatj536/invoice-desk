@@ -38,7 +38,7 @@ export function evidenceLine(c: Check): string {
       break
     case 'PO_INFERRED':
       if (e.suggested_po)
-        return e.printed_as ? `PO field reads "${e.printed_as}"; closest open PO is ${e.suggested_po}` : `No PO number on invoice; closest open PO is ${e.suggested_po}`
+        return e.printed_as ? `PO field reads “${e.printed_as}”; closest open PO is ${e.suggested_po}` : `No PO number on invoice; closest open PO is ${e.suggested_po}`
       break
     case 'PO_VENDOR_MISMATCH':
       if (e.suggested_po) return `Invoice cites ${e.printed_as}, which belongs to another vendor; closest open PO is ${e.suggested_po}`
@@ -50,9 +50,13 @@ export function evidenceLine(c: Check): string {
     }
     case 'LINE_MATCH_UNCERTAIN': {
       const xs = first(e.uncertain)
-      if (xs) return xs.map(p => `"${p.description}" may be PO line ${p.po_line} "${p.po_description}"`).join('; ')
+      if (xs) return xs.map(p => `“${p.description}” may be PO line ${p.po_line}, “${p.po_description}”`).join('; ')
       break
     }
+    case 'VENDOR_NOT_APPROVED':
+      if (e.notes) return `In the vendor file but not approved for payment (${String(e.notes).replace(/^./, ch => ch.toLowerCase())})`
+      if (e.name_on_invoice) return `“${e.name_on_invoice}” is not in the vendor file`
+      break
     case 'DOC_NOT_INVOICE':
       if (e.doc_type) return `Document is a ${String(e.doc_type).replace('_', ' ')}, not a bill`
       break

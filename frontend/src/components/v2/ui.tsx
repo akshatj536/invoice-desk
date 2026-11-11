@@ -1,5 +1,5 @@
 /* Invoice Desk v2 primitives. Every value comes from tokens (docs/DESIGN.md §4). */
-import { Check, LoaderCircle, Minus, X } from 'lucide-react'
+import { Check, ChevronDown, LoaderCircle, Minus, X } from 'lucide-react'
 import { createContext, useCallback, useContext, useEffect, useState, type ReactNode, type ThHTMLAttributes, type TdHTMLAttributes } from 'react'
 import { cx } from '../../app/format'
 import type { Tone } from '../../app/labels'
@@ -70,7 +70,7 @@ export function Panel({ title, actions, children, className, flush }: {
 /* ---------------------------------------------------------------- Table */
 export function Table({ children, footer, minWidth = 760 }: { children: ReactNode; footer?: ReactNode; minWidth?: number }) {
   return (
-    <div className="overflow-clip rounded-panel border border-line bg-surface">
+    <div className="overflow-x-auto rounded-panel border border-line bg-surface xl:overflow-clip">
       <table className="w-full border-collapse text-table" style={{ minWidth }}>{children}</table>
       {footer && <div className="flex h-9 items-center border-t border-line px-4 text-table text-fg-subtle tabular-nums">{footer}</div>}
     </div>
@@ -90,11 +90,11 @@ export function Tr({ children, onClick, className }: { children: ReactNode; onCl
   )
 }
 
-export function Td({ children, align = 'left', numeric, className, ...rest }: {
-  align?: 'left' | 'right' | 'center'; numeric?: boolean
+export function Td({ children, align = 'left', numeric, wrap, className, ...rest }: {
+  align?: 'left' | 'right' | 'center'; numeric?: boolean; wrap?: boolean
 } & TdHTMLAttributes<HTMLTableCellElement>) {
   return (
-    <td {...rest} className={cx('h-(--row-height) whitespace-nowrap px-3 py-2 align-middle first:pl-4 last:pr-4',
+    <td {...rest} className={cx('h-(--row-height) px-3 py-2 align-middle first:pl-4 last:pr-4', wrap ? 'whitespace-normal' : 'whitespace-nowrap',
       (numeric || align === 'right') && 'text-right tabular-nums', align === 'center' && 'text-center', className)}>{children}</td>
   )
 }
@@ -106,6 +106,16 @@ export function Stack({ primary, secondary }: { primary: ReactNode; secondary?: 
       <div className="text-table text-fg">{primary}</div>
       {secondary && <div className="mt-0.5 text-caption font-normal text-fg-subtle">{secondary}</div>}
     </div>
+  )
+}
+
+/** First reason plus "+N", full list in the tooltip. */
+export function Reasons({ labels }: { labels: string[] }) {
+  if (!labels.length) return <Dash />
+  return (
+    <span title={labels.join(', ')} className="text-fg-muted">
+      {labels[0]}{labels.length > 1 && <span className="ml-1.5 text-fg-subtle">+{labels.length - 1}</span>}
+    </span>
   )
 }
 
@@ -185,7 +195,12 @@ export function Input(props: React.InputHTMLAttributes<HTMLInputElement>) {
   return <input {...props} className={cx('h-(--control-height) rounded-control border border-line-strong bg-surface px-3 text-body text-fg outline-none focus:border-brand focus:ring-2 focus:ring-brand-soft', props.className)} />
 }
 export function Select(props: React.SelectHTMLAttributes<HTMLSelectElement>) {
-  return <select {...props} className={cx('h-(--control-height) rounded-control border border-line-strong bg-surface px-2 text-body text-fg outline-none focus:border-brand focus:ring-2 focus:ring-brand-soft', props.className)} />
+  return (
+    <span className="relative inline-flex">
+      <select {...props} className={cx('h-(--control-height) appearance-none rounded-control border border-line-strong bg-surface pl-3 pr-8 text-body text-fg outline-none focus:border-brand focus:ring-2 focus:ring-brand-soft', props.className)} />
+      <ChevronDown size={16} className="pointer-events-none absolute right-2 top-1/2 -translate-y-1/2 text-fg-subtle" aria-hidden />
+    </span>
+  )
 }
 export function Textarea(props: React.TextareaHTMLAttributes<HTMLTextAreaElement>) {
   return <textarea {...props} className={cx('min-h-16 w-full rounded-control border border-line-strong bg-surface px-3 py-2 text-body text-fg outline-none focus:border-brand focus:ring-2 focus:ring-brand-soft', props.className)} />
@@ -198,7 +213,7 @@ export function Label({ children, htmlFor }: { children: ReactNode; htmlFor?: st
 export function Switch({ checked, onChange, label, id }: { checked: boolean; onChange: (v: boolean) => void; label: string; id: string }) {
   return (
     <button id={id} role="switch" aria-checked={checked} aria-label={label} onClick={() => onChange(!checked)}
-      className={cx('relative h-5 w-9 shrink-0 rounded-full transition-colors', checked ? 'bg-brand' : 'bg-line-strong')}>
+      className={cx('relative h-5 w-9 shrink-0 rounded-full transition-colors', checked ? 'bg-brand' : 'bg-fg-disabled')}>
       <span className={cx('absolute left-0.5 top-0.5 h-4 w-4 rounded-full bg-surface transition-transform', checked && 'translate-x-4')} />
     </button>
   )

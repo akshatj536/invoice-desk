@@ -111,7 +111,7 @@ export function PageHeader({ title, crumbs, badge, meta, actions }: {
           <h1 className="truncate text-title font-semibold">{title}</h1>
           {badge}
         </div>
-        {meta && <div className="mt-0.5 text-table text-fg-muted tabular-nums">{meta}</div>}
+        {meta && <div className="mt-0.5 text-table text-fg-muted">{meta}</div>}
       </div>
       {actions && <div className="flex shrink-0 items-center gap-2">{actions}</div>}
     </header>

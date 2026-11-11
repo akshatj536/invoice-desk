@@ -68,7 +68,7 @@ export const STAGE_NAME: Record<string, string> = {
   match: 'Vendor and PO matched',
   reconcile: 'Compared to PO',
   decide: 'Decision',
-  review: 'Reviewed',
+  review: 'Review',
   act: 'Records',
   explain: 'Summary',
 }

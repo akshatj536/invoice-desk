@@ -34,6 +34,15 @@ export function dateTime(v: string | null | undefined): string {
   return d.toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' })
 }
 
+/** Table dates without time: "Oct 15" this year, "Oct 15, 2025" otherwise. */
+export function day(v: string | null | undefined): string {
+  const d = toDate(v)
+  if (!d) return '–'
+  return d.getFullYear() === new Date().getFullYear()
+    ? d.toLocaleDateString('en-US', { month: 'short', day: 'numeric' })
+    : d.toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' })
+}
+
 /** Detail pages: "Nov 11, 2026". */
 export function date(v: string | null | undefined): string {
   const d = toDate(v)

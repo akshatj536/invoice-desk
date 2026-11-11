@@ -9,6 +9,7 @@ import { Page, PageHeader } from '../../components/v2/shell'
 import { Badge, Button, Chip, Dash, EmptyState, Field, Fields, MatchIcon, Modal, Tabs, Textarea, useToast } from '../../components/v2/ui'
 import { orderFor, useRunStream, type StageState } from '../../hooks/useRunStream'
 import { api, type ActPreview, type Check, type RunSummary } from '../../lib/api'
+import { usePoll } from '../../app/data'
 
 type TabKey = 'details' | 'activity' | 'raw'
 
@@ -70,6 +71,11 @@ function stepDetail(s: StageState, run: RunSummary): string {
 }
 
 /* ------------------------------------------------------------------ sections */
+function sameText(a?: string | null, b?: string | null) {
+  const n = (x?: string | null) => String(x ?? '').toLowerCase().replace(/[^a-z0-9]/g, '')
+  return !!a && !!b && (n(a) === n(b) || n(a).includes(n(b)) || n(b).includes(n(a)))
+}
+
 function Section({ title, children, aside }: { title: string; children: ReactNode; aside?: ReactNode }) {
   return (
     <section className="border-b border-line px-4 py-4 last:border-b-0">
@@ -83,12 +89,15 @@ function Section({ title, children, aside }: { title: string; children: ReactNod
 }
 
 function DetailsTab({ stages }: { stages: Record<string, StageState> }) {
+  const records = usePoll(() => api.records(), 60000)
   const x = stages.extract.data?.extraction
   const m = stages.match.data || {}
   const math = stages.validate.data?.math
   const bank = stages.match.checks.find(c => c.id === 'match.bank')
   const pairs: any[] = stages.reconcile.data?.pairs || []
   const rt = stages.reconcile.data?.running_total
+  const poCheck = stages.match.checks.find(c => c.id === 'match.po')
+  const bankName = m.vendor ? records.data?.vendors.find(v => v.vendor_id === m.vendor.vendor_id)?.bank_name : undefined
   if (!x) return <EmptyState>{stages.extract.status === 'running' || stages.ingest.status === 'running' ? 'Reading invoice…' : 'No data was read from this document.'}</EmptyState>
   const totalsOk = math ? Math.abs((math.lines_sum ?? 0) - (math.subtotal ?? math.lines_sum)) <= 0.05 && Math.abs((math.expected_total ?? 0) - (math.total ?? 0)) <= 0.05 : null
 
@@ -129,14 +138,14 @@ function DetailsTab({ stages }: { stages: Record<string, StageState> }) {
             <thead><tr className="text-left text-caption font-medium text-fg-subtle">
               <th className="h-8 pr-3 font-medium">Field</th><th className="pr-3 font-medium">On invoice</th><th className="pr-3 font-medium">On vendor file</th><th className="w-14 text-center font-medium">Match</th>
             </tr></thead>
-            <tbody className="tabular-nums">
+            <tbody>
               {[['Account', bank.evidence.invoice_account, bank.evidence.file_account], ['Routing', bank.evidence.invoice_routing, bank.evidence.file_routing]].map(([k, a, b]) => {
                 const ok = !a || a === '-' ? null : String(a).replace(/\D/g, '').slice(-4) === String(b).replace(/\D/g, '').slice(-4)
                 return (
                   <tr key={k} className="border-t border-line">
                     <td className="h-9 pr-3 text-fg-subtle">{k}</td>
                     <td className={cx('pr-3', ok === false && 'text-danger-fg')}>{k === 'Account' ? String(a).replace('••••', '••') : a}</td>
-                    <td className="pr-3">{k === 'Account' ? String(b).replace('••••', '••') : b}</td>
+                    <td className="pr-3">{k === 'Account' ? `${bankName ? `${bankName} ` : ''}${String(b).replace('••••', '••')}` : b}</td>
                     <td className="text-center"><MatchIcon ok={ok} /></td>
                   </tr>
                 )
@@ -157,7 +166,7 @@ function DetailsTab({ stages }: { stages: Record<string, StageState> }) {
             {rt && <Field label="Remaining after" numeric><span className={cx(rt.remaining_after < -0.005 && 'font-medium text-danger-fg')}>{money(rt.remaining_after)}</span></Field>}
             <Field label="PO status"><span className="capitalize">{m.po.status}</span></Field>
           </Fields>
-        ) : <p className="text-table text-fg-muted">No purchase order matched.</p>}
+        ) : <p className="text-table text-fg-muted">{poCheck?.status === 'skip' ? 'Not looked up: the vendor is not approved for payment.' : 'No purchase order matched.'}</p>}
       </Section>
 
       {pairs.length > 0 && (
@@ -166,14 +175,14 @@ function DetailsTab({ stages }: { stages: Record<string, StageState> }) {
             <table className="w-full min-w-[620px] text-table">
               <thead><tr className="text-caption font-medium whitespace-nowrap text-fg-subtle">
                 <th className="h-8 pl-4 pr-3 text-left font-medium">Description</th>
-                <th className="pr-3 text-right font-medium">Invoice qty</th>
-                <th className="pr-3 text-right font-medium">PO remaining</th>
-                <th className="pr-3 text-right font-medium">Invoice price</th>
-                <th className="pr-3 text-right font-medium">PO price</th>
-                <th className="pr-3 text-right font-medium">Variance</th>
+                <th className="px-3 text-right font-medium">Invoice qty</th>
+                <th className="px-3 text-right font-medium">PO remaining</th>
+                <th className="px-3 text-right font-medium">Invoice price</th>
+                <th className="px-3 text-right font-medium">PO price</th>
+                <th className="px-3 text-right font-medium">Variance</th>
                 <th className="w-14 pr-4 text-center font-medium">Match</th>
               </tr></thead>
-              <tbody className="tabular-nums">
+              <tbody>
                 {pairs.map(p => {
                   const overQty = p.po_line != null && (p.qty ?? 0) > (p.po_qty_remaining ?? 0) + 1e-9
                   const overPrice = p.price_diff_pct != null && p.price_diff_pct > 1.0001
@@ -182,13 +191,13 @@ function DetailsTab({ stages }: { stages: Record<string, StageState> }) {
                     <tr key={p.invoice_line} className="border-t border-line">
                       <td className="py-2 pl-4 pr-3">
                         <div>{p.description}</div>
-                        <div className="text-caption text-fg-subtle">{p.po_line != null ? `PO line ${p.po_line} · ${p.po_description}` : 'Not on PO'}</div>
+                        <div className="text-caption text-fg-subtle">{p.po_line == null ? 'Not on PO' : sameText(p.description, p.po_description) ? `PO line ${p.po_line}` : `PO line ${p.po_line} · ${p.po_description}`}</div>
                       </td>
-                      <td className={cx('pr-3 text-right', overQty && 'font-medium text-danger-fg')}>{p.qty ?? <Dash />}</td>
-                      <td className="pr-3 text-right">{p.po_qty_remaining ?? <Dash />}</td>
-                      <td className="pr-3 text-right">{money(p.unit_price)}</td>
-                      <td className="pr-3 text-right">{p.po_unit_price != null ? money(p.po_unit_price) : <Dash />}</td>
-                      <td className={cx('pr-3 text-right', overPrice && 'font-medium text-danger-fg')}>{p.price_diff_pct != null ? `${p.price_diff_pct > 0 ? '+' : ''}${Number(p.price_diff_pct).toFixed(1)}%` : <Dash />}</td>
+                      <td className={cx('px-3 text-right tabular-nums', overQty && 'font-medium text-danger-fg')}>{p.qty ?? <Dash />}</td>
+                      <td className="px-3 text-right tabular-nums">{p.po_qty_remaining ?? <Dash />}</td>
+                      <td className="px-3 text-right tabular-nums">{money(p.unit_price)}</td>
+                      <td className="px-3 text-right tabular-nums">{p.po_unit_price != null ? money(p.po_unit_price) : <Dash />}</td>
+                      <td className={cx('px-3 text-right tabular-nums', overPrice && 'font-medium text-danger-fg')}>{p.price_diff_pct ? `${p.price_diff_pct > 0 ? '+' : ''}${Number(p.price_diff_pct).toFixed(1)}%` : <Dash />}</td>
                       <td className="pr-4 text-center"><MatchIcon ok={ok} /></td>
                     </tr>
                   )
@@ -205,14 +214,14 @@ function DetailsTab({ stages }: { stages: Record<string, StageState> }) {
 function ActivityTab({ stages, run, order, dev }: { stages: Record<string, StageState>; run: RunSummary; order: { key: string }[]; dev: boolean }) {
   return (
     <ol className="px-4 py-4">
-      {order.map((o, i) => {
+      {order.filter(o => dev || o.key !== 'explain').map((o, i, arr) => {
         const s = stages[o.key]
         const tone = stageTone(s)
         const waiting = o.key === 'review' && s.status !== 'done' && run.review_status === 'pending'
         const llmMs = s.llm_calls.reduce((a, c) => a + (c.latency_ms || 0), 0)
         return (
           <li key={o.key} className="relative flex gap-3 pb-5 last:pb-0">
-            {i < order.length - 1 && <span className="absolute left-2 top-5 bottom-0 w-px bg-line" aria-hidden />}
+            {i < arr.length - 1 && <span className="absolute left-2 top-5 bottom-0 w-px bg-line" aria-hidden />}
             <div className="relative pt-0.5"><StepIcon tone={waiting ? 'warn' : tone} /></div>
             <div className="min-w-0 flex-1">
               <div className="flex flex-wrap items-center gap-x-2">
@@ -265,17 +274,17 @@ function RawTab({ stages, run, events }: { stages: Record<string, StageState>; r
   )
 }
 
-function IssuesPanel({ checks, nextAction }: { checks: Check[]; nextAction: string | null }) {
+function IssuesPanel({ checks, nextAction, resolved }: { checks: Check[]; nextAction: string | null; resolved?: boolean }) {
   return (
     <section className="rounded-panel border border-line bg-surface">
-      <header className="flex h-11 items-center border-b border-line px-4 text-section font-semibold">Issues ({checks.length})</header>
+      <header className="flex h-11 items-center border-b border-line px-4 text-section font-semibold">{resolved ? `Issues (${checks.length}, resolved)` : `Issues (${checks.length})`}</header>
       <ul className="divide-y divide-line">
         {checks.map(c => (
           <li key={c.id} className="flex gap-3 px-4 py-3">
-            <CircleAlert size={16} className={cx('mt-0.5 shrink-0', REJECT_CODES.has(c.reason_code ?? '') || c.on_fail === 'REJECT' ? 'text-danger-fg' : 'text-warning-fg')} aria-hidden />
+            <CircleAlert size={16} className={cx('mt-0.5 shrink-0', resolved ? 'text-fg-subtle' : REJECT_CODES.has(c.reason_code ?? '') || c.on_fail === 'REJECT' ? 'text-danger-fg' : 'text-warning-fg')} aria-hidden />
             <div className="min-w-0">
               <div className="text-table font-semibold">{reasonLabel(c.reason_code ?? '')}</div>
-              <div className="text-table text-fg-muted tabular-nums">{evidenceLine(c)}</div>
+              <div className="text-table text-fg-muted">{evidenceLine(c)}</div>
             </div>
           </li>
         ))}
@@ -371,17 +380,7 @@ export default function InvoiceDetail() {
         </>) : undefined}
       />
 
-      <div className="space-y-4 px-(--page-gutter) py-6">
-        {resolved && reviewStage.status === 'done' && (
-          <div className="flex items-center gap-2 rounded-panel border border-line bg-surface px-4 py-3 text-table">
-            {run.review_status === 'approved' ? <CircleCheck size={16} className="text-success-fg" /> : <CircleX size={16} className="text-danger-fg" />}
-            <span><span className="font-semibold">{run.review_status === 'approved' ? 'Approved and posted' : 'Rejected'}</span>
-              <span className="text-fg-muted"> by {reviewStage.data?.reviewer} on {date(reviewStage.data?.at)}{run.review_note ? ` · “${run.review_note}”` : ''}</span></span>
-          </div>
-        )}
-
-        {!processing && issues.length > 0 && <IssuesPanel checks={issues} nextAction={resolved ? null : run.next_action} />}
-
+      <div className="px-(--page-gutter) py-6">
         <div className="grid gap-4 lg:grid-cols-[45fr_55fr]">
           <section className="flex h-[calc(100vh-var(--header-height)-3rem)] min-h-[560px] flex-col overflow-hidden rounded-panel border border-line bg-surface lg:sticky lg:top-4">
             <div className="flex h-10 items-center justify-between border-b border-line px-4">
@@ -393,7 +392,18 @@ export default function InvoiceDetail() {
             <iframe title="Invoice document" src={`/api/runs/${id}/pdf#view=FitH&toolbar=0`} className="w-full flex-1" />
           </section>
 
-          <section className="min-w-0 rounded-panel border border-line bg-surface">
+          <div className="min-w-0 space-y-4 lg:h-[calc(100vh-var(--header-height)-3rem)] lg:overflow-y-auto">
+        {resolved && reviewStage.status === 'done' && (
+          <div className="flex items-center gap-2 rounded-panel border border-line bg-surface px-4 py-3 text-table">
+            {run.review_status === 'approved' ? <CircleCheck size={16} className="text-success-fg" /> : <CircleX size={16} className="text-danger-fg" />}
+            <span><span className="font-semibold">{run.review_status === 'approved' ? 'Approved and posted' : 'Rejected'}</span>
+              <span className="text-fg-muted"> by {reviewStage.data?.reviewer} on {date(reviewStage.data?.at)}{run.review_note ? ` · “${run.review_note}”` : ''}</span></span>
+          </div>
+        )}
+
+        {!processing && issues.length > 0 && <IssuesPanel checks={issues} nextAction={resolved ? null : run.next_action} resolved={resolved} />}
+
+          <section className="rounded-panel border border-line bg-surface">
             <div className="px-4 pt-1">
               <Tabs<TabKey> value={tab} onChange={setTab} tabs={[
                 { key: 'details', label: 'Details' },
@@ -405,6 +415,7 @@ export default function InvoiceDetail() {
             {tab === 'activity' && <ActivityTab stages={stages} run={run} order={order} dev={dev} />}
             {tab === 'raw' && dev && <RawTab stages={stages} run={run} events={events.length} />}
           </section>
+          </div>
         </div>
       </div>
 

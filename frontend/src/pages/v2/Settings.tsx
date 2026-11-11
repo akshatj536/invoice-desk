@@ -26,14 +26,17 @@ export default function Settings() {
       <PageHeader title="Settings" />
       <Page>
         <div className="max-w-2xl space-y-6">
-          <Panel title="Workspace mode" actions={<Button kind="ghost" onClick={mode.resetToDefaults}>Restore defaults</Button>}>
+          <Panel title="Workspace mode">
             <div className="divide-y divide-line">
               <ModeRow id="mode-demo" title="Demo mode" detail="Sample invoices, reset and How it works, with a demo banner."
                 checked={mode.demo} onChange={mode.setDemo} />
               <ModeRow id="mode-dev" title="Dev mode" detail="Model and store details, step timings, run IDs and raw extracted data."
                 checked={mode.dev} onChange={mode.setDev} />
             </div>
-            <p className="mt-2 text-caption text-fg-subtle">Saved on this device.</p>
+            <div className="mt-3 flex items-center justify-between border-t border-line pt-3">
+              <span className="text-caption text-fg-subtle">Saved on this device.</span>
+              <Button onClick={mode.resetToDefaults}>Restore defaults</Button>
+            </div>
           </Panel>
 
           {cfg && (

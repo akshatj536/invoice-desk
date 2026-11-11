@@ -25,10 +25,10 @@ export default function Vendors() {
               {vendors.map(v => (
                 <Tr key={v.vendor_id}>
                   <Td className="whitespace-nowrap"><Stack primary={v.legal_name} secondary={v.aliases?.length ? `Also ${v.aliases.join(', ')}` : undefined} /></Td>
-                  <Td className="tabular-nums text-fg-muted">{v.vendor_id}</Td>
+                  <Td className="text-fg-muted">{v.vendor_id}</Td>
                   <Td>{v.approved ? <Badge tone="success">Approved</Badge> : <Badge tone="warning">Not approved</Badge>}</Td>
-                  <Td className="whitespace-nowrap tabular-nums">{bank(v.bank_name, v.bank_account)}</Td>
-                  <Td className="whitespace-nowrap tabular-nums text-fg-muted">{v.phone_on_file}</Td>
+                  <Td>{bank(v.bank_name, v.bank_account)}</Td>
+                  <Td className="text-fg-muted">{v.phone_on_file}</Td>
                   <Td numeric>{openPos(v.vendor_id)}</Td>
                 </Tr>
               ))}

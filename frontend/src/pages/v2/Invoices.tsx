@@ -2,11 +2,11 @@ import { ChevronDown, ChevronRight, Search } from 'lucide-react'
 import { useMemo, useState } from 'react'
 import { useNavigate, useSearchParams } from 'react-router-dom'
 import { usePoll } from '../../app/data'
-import { cx, dateTime, money, moneyCompact, ms, pct, plural } from '../../app/format'
+import { dateTime, money, moneyCompact, ms, pct, plural } from '../../app/format'
 import { reasonLabel, statusOf } from '../../app/labels'
 import { useAppMode } from '../../app/mode'
 import { Page, PageHeader } from '../../components/v2/shell'
-import { Badge, Chip, Dash, EmptyState, Input, KpiStrip, Select, Stack, Table, Tabs, Td, Th, Tr } from '../../components/v2/ui'
+import { Badge, Dash, EmptyState, Input, KpiStrip, Reasons, Select, Stack, Table, Tabs, Td, Th, Tr } from '../../components/v2/ui'
 import { api, type RunSummary } from '../../lib/api'
 
 type TabKey = 'all' | 'auto' | 'hold' | 'rejected' | 'resolved' | 'posted'
@@ -125,10 +125,10 @@ export default function Invoices() {
                       <Tr key={r.id} onClick={() => nav(`/invoices/${r.id}`)}>
                         <Td className="whitespace-nowrap text-fg-muted tabular-nums">{dateTime(r.created_at)}</Td>
                         <Td className="whitespace-nowrap"><Stack primary={r.vendor_name ?? r.filename} secondary={r.invoice_number} /></Td>
-                        <Td className="whitespace-nowrap tabular-nums">{r.po_number ? <span className="inline-flex items-center gap-1.5">{r.po_number}{r.po_inferred && <Chip>Suggested</Chip>}</span> : <Dash />}</Td>
+                        <Td>{r.po_number ? <>{r.po_number}{r.po_inferred && <span className="ml-1.5 text-fg-subtle">suggested</span>}</> : <Dash />}</Td>
                         <Td numeric>{r.total != null ? money(r.total) : <Dash />}</Td>
                         <Td><Badge tone={st.tone} processing={st.processing}>{st.label}</Badge></Td>
-                        <Td className="whitespace-normal text-fg-muted">{r.reason_codes?.length ? r.reason_codes.map(reasonLabel).join(', ') : <Dash />}</Td>
+                        <Td><Reasons labels={(r.reason_codes ?? []).map(reasonLabel)} /></Td>
                         {dev && <Td numeric className="font-code text-caption text-fg-subtle">{ms(r.duration_ms)}</Td>}
                       </Tr>
                     )
@@ -146,10 +146,10 @@ export default function Invoices() {
                   <Tr key={e.run_id} onClick={runIds.has(e.run_id) ? () => nav(`/invoices/${e.run_id}`) : undefined}>
                     <Td className="whitespace-nowrap text-fg-muted tabular-nums">{dateTime(e.processed_at)}</Td>
                     <Td><Stack primary={e.vendor_name} secondary={e.invoice_number} /></Td>
-                    <Td className="tabular-nums">{e.po_number || <Dash />}</Td>
+                    <Td>{e.po_number || <Dash />}</Td>
                     <Td numeric>{money(e.subtotal)}</Td>
                     <Td numeric>{money(e.total)}</Td>
-                    <Td className={cx('max-w-80 truncate text-fg-muted')}>{e.note || <Dash />}</Td>
+                    <Td className="max-w-80 truncate text-fg-muted">{e.note ? String(e.note).replace(' - ', ' · ') : <Dash />}</Td>
                   </Tr>
                 ))}
               </tbody>
