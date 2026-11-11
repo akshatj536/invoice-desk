@@ -100,7 +100,7 @@ One family everywhere: **Inter** (`font-ui`), falling back to the system UI stac
 | **Ghost** | No border, `text-fg-muted`, hover `bg-hover` | Tertiary actions, icon buttons |
 | **Destructive** | Secondary style with `text-danger-fg` | Reject |
 
-- Approve is primary. Reject is destructive secondary and **requires a note**: the button stays disabled until the note has text. This is enforced in the UI only; the API is unchanged.
+- Approve is primary. Reject is destructive secondary. A note is optional for both.
 - Disabled: 50% opacity, `cursor: not-allowed`, and a tooltip explaining why.
 - Focus: a 2px `brand` ring offset by 2px.
 

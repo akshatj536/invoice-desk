@@ -109,6 +109,16 @@ We extract principles only and copy no logos, brand colours, typefaces or illust
 - **Verification shown next to the details:** Mercury "Pending details" badge and tax-doc check icon [v]; Brex a green ✓ for verified [v].
 - **Mercury vendor list:** Name, Total paid, Last paid, Status, Tax docs; the detail opens in a 392px right-hand panel [v].
 
+### Stripe (from one saved screenshot only, so everything here is [e])
+- **Invoices list:**
+  - rows about 36px; header 12–13px, medium weight, dark grey, sentence case, no fill
+  - small rectangular status badges (Paid / Open / Draft) with a tinted fill and a 1px border
+  - amounts tabular, with the currency code in grey
+- **Shell:**
+  - plain sidebar items with 16px icons; the active item is shown by accent-coloured text only
+  - group labels 12px grey, sentence case
+- **Header:** page title about 24px/600 with one primary button and a "⋯" button at top right; filter chips sit above the table.
+
 ### Empty states and copy
 - **Linear:** "No issues" plus a text link; "No active or planned projects" plus "Create a new project" [secondary source]. Filters stay visible when a view is empty.
 - **Ramp:** the Drafts empty state is the upload target itself ("drop files or click here to upload") [secondary source].
@@ -131,7 +141,7 @@ We extract principles only and copy no logos, brand colours, typefaces or illust
 7. **Exception detail pattern:**
    - an Issues panel at the top: reason, one numeric evidence line, then **Recommended action**
    - passed checks listed in Activity
-   - Approve is primary; Reject is a destructive secondary and **requires a note** (UI-enforced, the API is unchanged)
+   - Approve is primary; Reject is a destructive secondary; the note is optional (the owner decided against requiring it)
 8. **Document beside data:** we keep the brief's PDF-left (45%) layout, like Bill.com. Ramp moved its document to the right in 2026, and that is noted as a possible follow-up.
 9. **Bank details:** masked as "First Pacific Bank ••0093", with the match state next to them.
 10. **Empty states:** one factual line plus at most one action, with filters left visible.
