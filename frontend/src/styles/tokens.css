@@ -1,0 +1,79 @@
+/* ==========================================================================
+   Invoice Desk v2 design tokens - the single source of truth (see docs/DESIGN.md).
+
+   Components consume these through the Tailwind utilities they generate, e.g.
+     bg-canvas  bg-surface  border-line  text-fg  text-fg-muted  text-brand
+     bg-success-bg text-success-fg   text-body  text-table  text-title
+     rounded-control  rounded-panel  shadow-popover  font-ui
+   Never write raw hex values, px font sizes or ad-hoc radii in components.
+
+   Light theme only (dark theme is a follow-up; names are semantic so it can be added).
+   ========================================================================== */
+@theme {
+  /* --- Typography ------------------------------------------------------- */
+  --font-ui: "Inter Variable", "Inter", ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+  --font-code: ui-monospace, SFMono-Regular, "SF Mono", Menlo, Consolas, monospace; /* Dev mode panels ONLY */
+
+  --text-caption: 12px;          /* table headers, badges, helper text */
+  --text-caption--line-height: 16px;
+  --text-table: 13px;            /* table cells, secondary text, metadata */
+  --text-table--line-height: 18px;
+  --text-body: 14px;             /* base UI text, buttons, inputs */
+  --text-body--line-height: 20px;
+  --text-section: 15px;          /* section titles (600) */
+  --text-section--line-height: 22px;
+  --text-title: 20px;            /* page titles (600) */
+  --text-title--line-height: 28px;
+  --text-figure: 22px;           /* KPI strip values (600, tabular) */
+  --text-figure--line-height: 28px;
+
+  /* --- Colour: neutrals --------------------------------------------------- */
+  --color-canvas: #f7f8fa;       /* app background */
+  --color-surface: #ffffff;      /* panels, tables, sidebar */
+  --color-subtle: #f9fafb;       /* table header band, quiet fills */
+  --color-hover: #f3f4f6;        /* row hover, selected nav item background */
+  --color-line: #e5e7eb;         /* 1px borders and dividers */
+  --color-line-strong: #d1d5db;  /* input and secondary-button borders */
+  --color-fg: #111827;           /* primary text */
+  --color-fg-muted: #4b5563;     /* secondary text */
+  --color-fg-subtle: #6b7280;    /* table headers, metadata, placeholders */
+  --color-fg-disabled: #9ca3af;
+  --color-on-brand: #ffffff;     /* text on primary buttons */
+
+  /* --- Colour: the one accent (primary buttons, links, focus, selected nav) */
+  --color-brand: #2d5bd1;
+  --color-brand-hover: #2449ad;
+  --color-brand-soft: #eef2fc;   /* focus ring tint, selected row tint */
+
+  /* --- Colour: status (muted; status only, always with a text label) ------ */
+  --color-success-fg: #15803d;   /* green-700 */
+  --color-success-bg: #f0fdf4;   /* green-50 */
+  --color-warning-fg: #b45309;   /* amber-700 */
+  --color-warning-bg: #fffbeb;   /* amber-50 */
+  --color-danger-fg: #b91c1c;    /* red-700 */
+  --color-danger-bg: #fef2f2;    /* red-50 */
+  --color-neutral-fg: #374151;   /* gray-700 */
+  --color-neutral-bg: #f3f4f6;   /* gray-100 */
+
+  /* --- Colour: data (charts and meters: one neutral, red only to flag) ---- */
+  --color-data: #9ca3af;
+  --color-data-track: #eef0f3;
+  --color-data-alert: #dc2626;
+
+  /* --- Shape -------------------------------------------------------------- */
+  --radius-badge: 4px;           /* status badges, reason chips */
+  --radius-control: 6px;         /* buttons, inputs, menus */
+  --radius-panel: 8px;           /* panels, tables, side panels (max) */
+
+  /* --- Elevation: popovers, dropdowns, modals, toasts only ----------------- */
+  --shadow-popover: 0 8px 24px rgb(17 24 39 / 0.10), 0 1px 3px rgb(17 24 39 / 0.08);
+}
+
+:root {
+  /* Layout constants (consumed as w-(--sidebar-width), h-(--row-height) …) */
+  --sidebar-width: 232px;
+  --row-height: 40px;            /* table rows */
+  --control-height: 32px;        /* buttons, inputs, tabs */
+  --page-gutter: 28px;           /* content padding (24-32px band) */
+  --header-height: 56px;         /* page header */
+}
