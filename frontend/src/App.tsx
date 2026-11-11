@@ -3,6 +3,7 @@ import { BrowserRouter, Navigate, Route, Routes, useParams } from 'react-router-
 import { AppModeProvider, useAppMode } from './app/mode'
 import { AppShell, Page, PageHeader } from './components/v2/shell'
 import { EmptyState, ToastProvider } from './components/v2/ui'
+import Inbox from './pages/v2/Inbox'
 import InvoiceDetail from './pages/v2/InvoiceDetail'
 
 function Stub({ title }: { title: string }) {
@@ -27,7 +28,7 @@ export default function App() {
           <Routes>
             <Route element={<AppShell />}>
               <Route index element={<Navigate to="/inbox" replace />} />
-              <Route path="inbox" element={<Stub title="Inbox" />} />
+              <Route path="inbox" element={<Inbox />} />
               <Route path="exceptions" element={<Stub title="Exceptions" />} />
               <Route path="invoices" element={<Stub title="Invoices" />} />
               <Route path="invoices/:id" element={<InvoiceDetail />} />
