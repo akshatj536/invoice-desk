@@ -1,0 +1,140 @@
+[
+  {
+    "file": "01_happy_path.pdf",
+    "title": "Happy path",
+    "group": "happy",
+    "story": "Clean digital invoice from an approved vendor. PO number printed, every line matches PO-1042, tax is right, bank details match the vendor file.",
+    "expected_decision": "APPROVE",
+    "expected_codes": [],
+    "vendor": "Acme Office Furniture Co.",
+    "invoice_number": "AOF-90412",
+    "total": 11286.0
+  },
+  {
+    "file": "02_bank_details_changed.pdf",
+    "title": "Perfect invoice, new bank details",
+    "group": "edge",
+    "story": "Everything matches PO-1047 exactly, but the remit-to bank account differs from the vendor file. Classic vendor-impersonation fraud.",
+    "expected_decision": "HOLD",
+    "expected_codes": [
+      "BANK_DETAILS_MISMATCH"
+    ],
+    "vendor": "Summit Tech Supplies LLC",
+    "invoice_number": "STS-61877",
+    "total": 16839.36
+  },
+  {
+    "file": "03_vendor_math_error.pdf",
+    "title": "Vendor's own maths is wrong",
+    "group": "edge",
+    "story": "Line items add up to $3,840 but the vendor printed a subtotal of $3,940. The system re-reads once to rule out a misread, then holds for a corrected invoice.",
+    "expected_decision": "HOLD",
+    "expected_codes": [
+      "VENDOR_MATH_ERROR"
+    ],
+    "vendor": "Greenleaf Facility Services Inc.",
+    "invoice_number": "GFS-2026-1107",
+    "total": 4255.2
+  },
+  {
+    "file": "04_duplicate_resubmitted.pdf",
+    "title": "Same bill, new number",
+    "group": "edge",
+    "story": "INV-2041 was approved on Oct 6. The vendor re-sent it as INV-2041-R: same amount, date and lines. Exact-number checks miss it.",
+    "expected_decision": "HOLD",
+    "expected_codes": [
+      "DUPLICATE_SUSPECTED"
+    ],
+    "vendor": "Blue Harbor Logistics Inc.",
+    "invoice_number": "INV-2041-R",
+    "total": 1275.0
+  },
+  {
+    "file": "05a_split_part1.pdf",
+    "title": "Split PO, part 1 (60 of 100)",
+    "group": "edge",
+    "story": "First partial invoice against PO-1050 (100 chairs). Billing less than the PO is normal - approve and track what's left. Run this before part 2.",
+    "expected_decision": "APPROVE",
+    "expected_codes": [],
+    "vendor": "Acme Office Furniture Co.",
+    "invoice_number": "AOF-90455",
+    "total": 6480.0
+  },
+  {
+    "file": "05b_split_part2.pdf",
+    "title": "Split PO, part 2 (50 more)",
+    "group": "edge",
+    "story": "Fine on its own, but after part 1 only 40 chairs are left. Together the two bills are $11,000 on a $10,000 order.",
+    "expected_decision": "HOLD",
+    "expected_codes": [
+      "QTY_EXCEEDS_REMAINING",
+      "RUNNING_TOTAL_EXCEEDS_PO"
+    ],
+    "vendor": "Acme Office Furniture Co.",
+    "invoice_number": "AOF-90471",
+    "total": 5400.0
+  },
+  {
+    "file": "06_scanned.pdf",
+    "title": "Scanned invoice",
+    "group": "brief",
+    "story": "Image-only PDF (no text layer), slightly skewed. Same reading path as digital PDFs; descriptions differ from the PO so lines are paired by meaning.",
+    "expected_decision": "APPROVE",
+    "expected_codes": [],
+    "vendor": "Greenleaf Facility Services Inc.",
+    "invoice_number": "GFS-2026-1112",
+    "total": 1273.32
+  },
+  {
+    "file": "07_no_po_number.pdf",
+    "title": "No PO number",
+    "group": "brief",
+    "story": "No PO printed. The system narrows to the vendor's open POs, the model suggests the best fit, code verifies it - and holds for a human to confirm.",
+    "expected_decision": "HOLD",
+    "expected_codes": [
+      "PO_INFERRED"
+    ],
+    "vendor": "Summit Tech Supplies LLC",
+    "invoice_number": "STS-61902",
+    "total": 6026.4
+  },
+  {
+    "file": "08_price_over_tolerance.pdf",
+    "title": "Price above tolerance",
+    "group": "brief",
+    "story": "Quantity matches, but the unit price is $189 vs $180 on the PO (+5%, tolerance is 1%).",
+    "expected_decision": "HOLD",
+    "expected_codes": [
+      "PRICE_OVER_TOLERANCE"
+    ],
+    "vendor": "Acme Office Furniture Co.",
+    "invoice_number": "AOF-90488",
+    "total": 3061.8
+  },
+  {
+    "file": "09_unapproved_vendor.pdf",
+    "title": "Vendor not approved",
+    "group": "brief",
+    "story": "Crestline is in the vendor file but onboarding is incomplete, so it is not approved for payment.",
+    "expected_decision": "REJECT",
+    "expected_codes": [
+      "VENDOR_NOT_APPROVED"
+    ],
+    "vendor": "Crestline Print & Signage",
+    "invoice_number": "CPS-3310",
+    "total": 3510.0
+  },
+  {
+    "file": "10_proforma.pdf",
+    "title": "Not actually an invoice",
+    "group": "brief",
+    "story": "A proforma is a request for advance payment, not a bill. It must not be booked as a payable.",
+    "expected_decision": "REJECT",
+    "expected_codes": [
+      "DOC_NOT_INVOICE"
+    ],
+    "vendor": "Acme Office Furniture Co.",
+    "invoice_number": "PF-2207",
+    "total": 4968.0
+  }
+]

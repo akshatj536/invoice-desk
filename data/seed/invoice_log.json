@@ -1,0 +1,5 @@
+[
+  {"run_id": "seed-001", "vendor_id": "V001", "vendor_name": "Acme Office Furniture Co.", "invoice_number": "AOF-88213", "invoice_date": "2026-07-30", "po_number": "PO-1021", "subtotal": 3960.00, "total": 4276.80, "currency": "USD", "file_hash": "seed-aof-88213", "lines_fingerprint": "18x220.00", "decision": "APPROVE", "processed_at": "2026-08-01T10:12:00Z", "note": "Historical"},
+  {"run_id": "seed-002", "vendor_id": "V002", "vendor_name": "Summit Tech Supplies LLC", "invoice_number": "STS-55102", "invoice_date": "2026-08-20", "po_number": "PO-1058", "subtotal": 2240.00, "total": 2419.20, "currency": "USD", "file_hash": "seed-sts-55102", "lines_fingerprint": "4x560.00", "decision": "APPROVE", "processed_at": "2026-08-22T15:40:00Z", "note": "Historical"},
+  {"run_id": "seed-003", "vendor_id": "V004", "vendor_name": "Blue Harbor Logistics Inc.", "invoice_number": "INV-2041", "invoice_date": "2026-10-03", "po_number": "PO-1033", "subtotal": 1275.00, "total": 1275.00, "currency": "USD", "file_hash": "seed-inv-2041", "lines_fingerprint": "3x425.00", "decision": "APPROVE", "processed_at": "2026-10-06T09:05:00Z", "note": "Historical - 3 of 6 shipments"}
+]

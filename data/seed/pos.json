@@ -1,0 +1,18 @@
+[
+  {"po_number": "PO-1021", "vendor_id": "V001", "created_date": "2026-07-14", "currency": "USD", "total": 3960.00,  "amount_invoiced": 3960.00, "status": "closed", "description": "Conference room chairs"},
+  {"po_number": "PO-1033", "vendor_id": "V004", "created_date": "2026-09-22", "currency": "USD", "total": 2550.00,  "amount_invoiced": 1275.00, "status": "open",   "description": "Freight - LTL shipments, Q4"},
+  {"po_number": "PO-1039", "vendor_id": "V003", "created_date": "2026-09-28", "currency": "USD", "total": 3840.00,  "amount_invoiced": 0,       "status": "open",   "description": "October janitorial service and consumables"},
+  {"po_number": "PO-1042", "vendor_id": "V001", "created_date": "2026-10-06", "currency": "USD", "total": 10450.00, "amount_invoiced": 0,       "status": "open",   "description": "Ergonomic seating and desks - 3rd floor"},
+  {"po_number": "PO-1044", "vendor_id": "V003", "created_date": "2026-10-09", "currency": "USD", "total": 1179.00,  "amount_invoiced": 0,       "status": "open",   "description": "Breakroom supplies"},
+  {"po_number": "PO-1047", "vendor_id": "V002", "created_date": "2026-10-12", "currency": "USD", "total": 15592.00, "amount_invoiced": 0,       "status": "open",   "description": "Laptop refresh - design team"},
+  {"po_number": "PO-1050", "vendor_id": "V001", "created_date": "2026-10-15", "currency": "USD", "total": 10000.00, "amount_invoiced": 0,       "status": "open",   "description": "Stacking chairs - event space"},
+  {"po_number": "PO-1055", "vendor_id": "V002", "created_date": "2026-10-20", "currency": "USD", "total": 5580.00,  "amount_invoiced": 0,       "status": "open",   "description": "Peripherals and monitors - November new hires"},
+  {"po_number": "PO-1058", "vendor_id": "V002", "created_date": "2026-08-02", "currency": "USD", "total": 2240.00,  "amount_invoiced": 2240.00, "status": "closed", "description": "Network switches"},
+  {"po_number": "PO-1061", "vendor_id": "V001", "created_date": "2026-10-23", "currency": "USD", "total": 2700.00,  "amount_invoiced": 0,       "status": "open",   "description": "Filing cabinets - finance team"},
+  {"po_number": "PO-1066", "vendor_id": "V001", "created_date": "2026-10-27", "currency": "USD", "total": 4008.00,  "amount_invoiced": 0, "status": "open", "description": "Seating and monitor arms - 4th floor"},
+  {"po_number": "PO-1068", "vendor_id": "V002", "created_date": "2026-10-28", "currency": "USD", "total": 4090.00,  "amount_invoiced": 0, "status": "open", "description": "Conference room AV refresh"},
+  {"po_number": "PO-1070", "vendor_id": "V003", "created_date": "2026-10-29", "currency": "USD", "total": 3650.00,  "amount_invoiced": 0, "status": "open", "description": "November janitorial and window cleaning"},
+  {"po_number": "PO-1072", "vendor_id": "V004", "created_date": "2026-10-30", "currency": "USD", "total": 2470.00,  "amount_invoiced": 0, "status": "open", "description": "Freight - Oakland office move"},
+  {"po_number": "PO-1074", "vendor_id": "V001", "created_date": "2026-11-02", "currency": "USD", "total": 5640.00,  "amount_invoiced": 0, "status": "open", "description": "Breakout area furniture"},
+  {"po_number": "PO-1076", "vendor_id": "V002", "created_date": "2026-11-03", "currency": "USD", "total": 1608.00,  "amount_invoiced": 0, "status": "open", "description": "Docks and keyboards - finance team"}
+]

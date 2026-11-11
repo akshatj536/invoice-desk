@@ -1,0 +1,62 @@
+[
+  {
+    "vendor_id": "V001",
+    "legal_name": "Acme Office Furniture Co.",
+    "aliases": "Acme Office Furniture; ACME Furniture; Acme Office Furniture Company",
+    "tax_id": "94-3381207",
+    "bank_name": "First Pacific Bank",
+    "bank_account": "004417820093",
+    "bank_routing": "121000358",
+    "phone_on_file": "+1 (415) 555-0142",
+    "approved": "TRUE",
+    "notes": "Furniture supplier since 2023"
+  },
+  {
+    "vendor_id": "V002",
+    "legal_name": "Summit Tech Supplies LLC",
+    "aliases": "Summit Tech Supplies; Summit Tech",
+    "tax_id": "27-1946652",
+    "bank_name": "Silicon Valley Commerce Bank",
+    "bank_account": "7730019284",
+    "bank_routing": "121000248",
+    "phone_on_file": "+1 (408) 555-0199",
+    "approved": "TRUE",
+    "notes": "IT hardware reseller"
+  },
+  {
+    "vendor_id": "V003",
+    "legal_name": "Greenleaf Facility Services Inc.",
+    "aliases": "Greenleaf Facility Services; Greenleaf Facilities",
+    "tax_id": "68-0457719",
+    "bank_name": "Bay Credit Union",
+    "bank_account": "5520148876",
+    "bank_routing": "322271627",
+    "phone_on_file": "+1 (510) 555-0117",
+    "approved": "TRUE",
+    "notes": "Janitorial and breakroom supplies"
+  },
+  {
+    "vendor_id": "V004",
+    "legal_name": "Blue Harbor Logistics Inc.",
+    "aliases": "Blue Harbor Logistics; Blue Harbor Freight",
+    "tax_id": "45-2210938",
+    "bank_name": "Harborline National Bank",
+    "bank_account": "3091827364",
+    "bank_routing": "026009593",
+    "phone_on_file": "+1 (650) 555-0163",
+    "approved": "TRUE",
+    "notes": "LTL freight carrier"
+  },
+  {
+    "vendor_id": "V005",
+    "legal_name": "Crestline Print & Signage",
+    "aliases": "Crestline Print and Signage; Crestline Signage",
+    "tax_id": "83-1172054",
+    "bank_name": "Golden Gate Savings",
+    "bank_account": "6612093847",
+    "bank_routing": "091000019",
+    "phone_on_file": "+1 (415) 555-0188",
+    "approved": "FALSE",
+    "notes": "Onboarding incomplete: W-9 and bank letter outstanding"
+  }
+]
