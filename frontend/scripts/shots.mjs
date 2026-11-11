@@ -27,6 +27,7 @@ for (const t of targets) {
       await page.waitForTimeout(700)
     }
   }
+  await page.evaluate(() => window.scrollTo(0, 0))
   await page.screenshot({ path: `${OUT}/${name}.png`, fullPage: true })
   console.log(`  ${name}.png  <- ${rest}`)
 }
