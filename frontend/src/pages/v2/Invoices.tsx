@@ -128,7 +128,7 @@ export default function Invoices() {
                         <Td className="whitespace-nowrap tabular-nums">{r.po_number ? <span className="inline-flex items-center gap-1.5">{r.po_number}{r.po_inferred && <Chip>Suggested</Chip>}</span> : <Dash />}</Td>
                         <Td numeric>{r.total != null ? money(r.total) : <Dash />}</Td>
                         <Td><Badge tone={st.tone} processing={st.processing}>{st.label}</Badge></Td>
-                        <Td className="text-fg-muted">{r.reason_codes?.length ? r.reason_codes.map(reasonLabel).join(', ') : <Dash />}</Td>
+                        <Td className="whitespace-normal text-fg-muted">{r.reason_codes?.length ? r.reason_codes.map(reasonLabel).join(', ') : <Dash />}</Td>
                         {dev && <Td numeric className="font-code text-caption text-fg-subtle">{ms(r.duration_ms)}</Td>}
                       </Tr>
                     )

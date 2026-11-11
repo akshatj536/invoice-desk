@@ -12,10 +12,13 @@ const opt = (k, d) => { const i = args.indexOf(k); return i >= 0 ? args[i + 1] :
 const BASE = opt('--base', 'http://localhost:8790')
 const OUT = opt('--out', '.')
 const W = Number(opt('--width', 1440))
-const targets = args.filter((a, i) => a.includes('=') && !args[i - 1]?.startsWith('--'))
+const targets = args.filter((a, i) => a.includes('=') && !args[i - 1]?.startsWith('--') && !a.startsWith('--'))
 
 const browser = await chromium.launch({ channel: 'chrome' })
 const page = await browser.newPage({ viewport: { width: W, height: 900 } })
+// --mode demo | dev | demo,dev  -> sets the app mode in localStorage before load (default: product)
+const modes = (opt('--mode', '') || '').split(',')
+await page.addInitScript(m => localStorage.setItem('invoice-desk.mode', JSON.stringify(m)), { demo: modes.includes('demo'), dev: modes.includes('dev') })
 for (const t of targets) {
   const [name, rest] = [t.slice(0, t.indexOf('=')), t.slice(t.indexOf('=') + 1)]
   const [path, ...actions] = rest.split('|')

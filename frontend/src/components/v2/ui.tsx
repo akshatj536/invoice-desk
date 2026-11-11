@@ -6,18 +6,22 @@ import type { Tone } from '../../app/labels'
 
 /* ---------------------------------------------------------------- Button */
 type BtnKind = 'primary' | 'secondary' | 'ghost' | 'destructive'
+const BTN_BASE = 'inline-flex h-(--control-height) items-center justify-center gap-2 rounded-control px-3 text-body font-medium whitespace-nowrap transition-colors disabled:opacity-50 disabled:pointer-events-none'
+const BTN_KIND: Record<BtnKind, string> = {
+  primary: 'bg-brand text-on-brand hover:bg-brand-hover',
+  secondary: 'bg-surface text-fg border border-line-strong hover:bg-hover',
+  ghost: 'text-fg-muted hover:bg-hover hover:text-fg',
+  destructive: 'bg-surface text-danger-fg border border-line-strong hover:bg-danger-bg',
+}
+/** A link styled as a button (never nest a <button> inside an <a>). */
+export function ButtonLink({ kind = 'secondary', icon, children, className, ...rest }: { kind?: BtnKind; icon?: ReactNode } & React.AnchorHTMLAttributes<HTMLAnchorElement>) {
+  return <a {...rest} className={cx(BTN_BASE, BTN_KIND[kind], className)}>{icon}{children}</a>
+}
 export function Button({ kind = 'secondary', children, className, icon, ...rest }: {
   kind?: BtnKind; icon?: ReactNode; children?: ReactNode
 } & React.ButtonHTMLAttributes<HTMLButtonElement>) {
-  const styles: Record<BtnKind, string> = {
-    primary: 'bg-brand text-on-brand hover:bg-brand-hover',
-    secondary: 'bg-surface text-fg border border-line-strong hover:bg-hover',
-    ghost: 'text-fg-muted hover:bg-hover hover:text-fg',
-    destructive: 'bg-surface text-danger-fg border border-line-strong hover:bg-danger-bg',
-  }
   return (
-    <button {...rest}
-      className={cx('inline-flex h-(--control-height) items-center justify-center gap-2 rounded-control px-3 text-body font-medium whitespace-nowrap transition-colors disabled:opacity-50 disabled:pointer-events-none', styles[kind], className)}>
+    <button {...rest} className={cx(BTN_BASE, BTN_KIND[kind], className)}>
       {icon}{children}
     </button>
   )
@@ -90,7 +94,7 @@ export function Td({ children, align = 'left', numeric, className, ...rest }: {
   align?: 'left' | 'right' | 'center'; numeric?: boolean
 } & TdHTMLAttributes<HTMLTableCellElement>) {
   return (
-    <td {...rest} className={cx('h-(--row-height) px-3 py-2 align-middle first:pl-4 last:pr-4',
+    <td {...rest} className={cx('h-(--row-height) whitespace-nowrap px-3 py-2 align-middle first:pl-4 last:pr-4',
       (numeric || align === 'right') && 'text-right tabular-nums', align === 'center' && 'text-center', className)}>{children}</td>
   )
 }
